@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {connect} from "react-redux";
 
 const Login = props => {
     return(
@@ -155,6 +156,14 @@ const Google = styled.button`
     background-color: rgba(207,207,207,0.25);
     color:rgba(0,0,0,0.75);
   }
-  
 `;
-export default Login;
+
+const mapStateToProps = state => {
+    return {};
+}
+
+const mapDispatchToProps = (dispatch) => {
+    {}
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Login);
