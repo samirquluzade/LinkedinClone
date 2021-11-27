@@ -1,9 +1,15 @@
 import styled from "styled-components";
 import PostModal from './PostModal';
-import {useState} from "react";
+import {useState,useEffect} from "react";
+import {connect} from "react-redux";
+import {getArticlesAPI} from "../actions";
 
 const Main = (props) => {
     const [showModal,setShowModal] = useState("close");
+
+    useEffect(() => {
+        props.getArticles();
+    },[]);
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -24,9 +30,13 @@ const Main = (props) => {
     }
     return(
         <Container>
-            <ShareBox>Share
-            <div>
+            <ShareBox>
+                <div>
+                { props.user && props.user.photoURL ?
+                    <img src={props.user.photoURL} />
+                    :
                 <img src="/images/user.svg" alt=""/>
+                }
                 <button onClick={handleClick}>Start a post</button>
             </div>
             <div>
@@ -49,7 +59,9 @@ const Main = (props) => {
                 </button>
             </div>
             </ShareBox>
-            <div>
+            <Content>
+                {props.loading && <img src="/images/spin-loader.svg" />}
+
                 <Article>
                     <SharedActor>
                         <a>
@@ -103,7 +115,7 @@ const Main = (props) => {
                         </button>
                     </SocialActions>
                 </Article>
-            </div>
+            </Content>
             <PostModal showModal={showModal} handleClick={handleClick}/>
         </Container>
     );
@@ -294,4 +306,23 @@ const SocialActions = styled.div`
     }
   }
 `;
-export default Main;
+
+const Content = styled.div`
+  text-align: center;
+  & > img{
+    width: 30px;
+  }
+`;
+
+const mapStateToProps = (state) => {
+    return{
+        loading:state.articleState.loading,
+        user:state.userState.user
+    }
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    getArticles: () => dispatch(getArticlesAPI())
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(Main);
