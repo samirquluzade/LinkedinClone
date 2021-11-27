@@ -3,45 +3,53 @@ import styled from 'styled-components';
 
 const PostModal = props => {
     const [editorText,setEditorText] = useState("");
-    return(
-      <Container>
-          <Content>
-              <Header>
-                  <h2>Create a post</h2>
-                  <button>
-                      <img src="/images/close-icon.svg" alt=""/>
-                  </button>
-              </Header>
-              <SharedContent>
-                  <UserInfo>
-                      <img src="/images/user.svg" alt=""/>
-                      <span>Name</span>
-                  </UserInfo>
-                  <Editor>
-                    <textarea value={editorText} onChange={(e) => setEditorText(e.target.value)} placeholder="What do you want to talk about?" autoFocus={true}></textarea>
-                  </Editor>
-              </SharedContent>
-              <ShareCreation>
-                  <AttachAssets>
-                      <AssetButton>
-                          <img src="/images/share-image.svg" alt=""/>
-                      </AssetButton>
-                      <AssetButton>
-                          <img src="/images/share-video.svg" alt=""/>
-                      </AssetButton>
-                  </AttachAssets>
-                  <ShareComment>
-                      <AssetButton>
-                          <img src="/images/share-comment.svg" alt=""/>
-                          Anyone
-                      </AssetButton>
-                  </ShareComment>
-                  <PostButton>
 
-                  </PostButton>
-              </ShareCreation>
-          </Content>
-      </Container>
+    const reset = (e) => {
+        setEditorText("");
+        props.handleClick(e);
+    }
+
+    return(
+        <>
+            { props.showModal === "open" &&
+          <Container>
+              <Content>
+                  <Header>
+                      <h2>Create a post</h2>
+                      <button onClick={(e) => reset(e)}>
+                          <img src="/images/close-icon.svg" alt=""/>
+                      </button>
+                  </Header>
+                  <SharedContent>
+                      <UserInfo>
+                          <img src="/images/user.svg" alt=""/>
+                          <span>Name</span>
+                      </UserInfo>
+                      <Editor>
+                        <textarea value={editorText} onChange={(e) => setEditorText(e.target.value)} placeholder="What do you want to talk about?" autoFocus={true}></textarea>
+                      </Editor>
+                  </SharedContent>
+                  <ShareCreation>
+                      <AttachAssets>
+                          <AssetButton>
+                              <img src="/images/share-image.svg" alt=""/>
+                          </AssetButton>
+                          <AssetButton>
+                              <img src="/images/share-video.svg" alt=""/>
+                          </AssetButton>
+                      </AttachAssets>
+                      <ShareComment>
+                          <AssetButton>
+                              <img src="/images/share-comment.svg" alt=""/>
+                              Anyone
+                          </AssetButton>
+                      </ShareComment>
+                      <PostButton disabled={editorText==="" ? true : false}>Post</PostButton>
+                  </ShareCreation>
+              </Content>
+          </Container>
+            }
+        </>
     );
 }
 
@@ -54,6 +62,7 @@ const Container = styled.div`
   z-index: 100;
   color:black;
   background-color: rgba(0,0,0,0.7);
+  animation: fadeIn 0.3s;
 `;
 
 const Content = styled.div`
@@ -85,7 +94,7 @@ const Header = styled.div`
     width: 40px;
     min-width: auto;
     color:rgba(0,0,0,0.15);
-    svg{
+    svg,img{
       pointer-events: none;
     }
   }
@@ -159,7 +168,7 @@ const PostButton = styled.button`
   border-radius: 20px;
   padding-left: 16px;
   padding-right: 16px;
-  background: #0a66c2;
+  background: ${props => (props.disabled ? "rgba(0,0,0,0.8)" : '#0a66c2')};
   color:white;
   &:hover{
     background: #004182;
